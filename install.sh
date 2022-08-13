@@ -1,3 +1,4 @@
+#!/bin/bash
 # Install and set zsh
 if [[ ! -z `which zsh` ]];
 then

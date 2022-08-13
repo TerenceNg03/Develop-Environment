@@ -73,6 +73,7 @@ ZSH_THEME="robbyrussell"
 plugins=(
 	git
 	docker
+        fzf
 	conda-zsh-completion
 	zsh-interactive-cd
 	zsh-autosuggestions
@@ -116,3 +117,13 @@ fi
 
 export PATH=$PATH:${HOME}/node/bin
 [[ -s ${HOME}/.autojump/etc/profile.d/autojump.sh ]] && source ${HOME}/.autojump/etc/profile.d/autojump.sh 
+
+if [[ ! -z `which bat` ]];
+then
+        alias fzfp="fzf --preview-window 'right:60%' --layout reverse --margin=1,4 --preview 'bat --color=always --style=header,grid --line-range :300 --theme=gruvbox-light {}'"
+        batdiff() {
+            git diff --name-only --relative --diff-filter=d | xargs bat --theme=gruvbox-light --diff
+        }
+else
+        alias fzfp="fzf --preview-window 'right:60%' --layout reverse --margin=1,4 --preview 'cat {}'"
+fi

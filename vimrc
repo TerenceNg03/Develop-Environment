@@ -1,5 +1,4 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
 syntax on
 set clipboard=unnamed
 set number
@@ -14,6 +13,9 @@ set backspace=indent,eol,start
 set laststatus=2
 set cmdheight=2
 set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set termencoding=utf-8
+set encoding=utf-8
 
 call plug#begin()
 Plug 'majutsushi/tagbar'

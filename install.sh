@@ -11,7 +11,9 @@ else
 fi
 
 # Install vim
-curl -sL install-node.vercel.app/lts | bash -s -- --prefix=$HOME --yes
+mkdir -p $HOME/node
+curl -sL install-node.vercel.app/lts | bash -s -- --prefix=$HOME/node --yes
+corepack enable
 curl -fLo ${HOME}/.vim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 cp vimrc ${HOME}/.vimrc

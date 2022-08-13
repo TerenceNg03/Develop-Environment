@@ -114,3 +114,4 @@ then
         alias conda=mamba
 fi
 
+export PATH=$PATH:${HOME}/node/bin

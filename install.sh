@@ -24,3 +24,10 @@ vim +PlugInstall +qall
 # setup coc
 cd ${HOME}/.vim/plugged/coc.nvim && yarn install
 
+# Install autojump
+cd ${HOME} && git clone https://github.com/wting/autojump.git
+${HOME}/autojump/install.py
+
+# Install fzf
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install --all

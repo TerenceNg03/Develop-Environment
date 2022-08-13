@@ -13,6 +13,7 @@ fi
 
 # Install vim
 mkdir -p $HOME/node
+export PATH=$PATH:${HOME}/node/bin
 curl -sL install-node.vercel.app/lts | bash -s -- --prefix=$HOME/node --yes
 corepack enable
 curl -fLo ${HOME}/.vim/autoload/plug.vim --create-dirs \

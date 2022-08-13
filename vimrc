@@ -16,7 +16,7 @@ set cmdheight=2
 set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:%l/%L%)\
 
 call plug#begin()
-Plug 'vim-scripts/taglist.vim'
+Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
 Plug 'preservim/nerdtree'
 Plug 'airblade/vim-gitgutter'
@@ -37,6 +37,13 @@ let g:ShowLineNumbers=1
 let g:Hidden=0
 map <F3> :NERDTreeToggle<CR>
 
+"TagBar
+let g:tagbar_autopreview = 0
+let g:tagbar_sort = 0
+let g:tagbar_left = 1
+let g:tagbar_width = 25
+let g:tagbar_autofocus = 1
+nmap <F2> :TagbarToggle<CR>
 
 "airline setup
 let g:airline#extensions#tabline#enabled = 1

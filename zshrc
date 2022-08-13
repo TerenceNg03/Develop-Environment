@@ -108,7 +108,6 @@ autoload -U compinit && compinit
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-[ -f /usr/local/etc/profile.d/autojump.sh ] && . /usr/local/etc/profile.d/autojump.sh
 source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
 if [[ ! -z `which mamba` ]];
 then

@@ -109,14 +109,9 @@ autoload -U compinit && compinit
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source "$HOME/.vim/plugged/gruvbox/gruvbox_256palette.sh"
-if [[ ! -z `which mamba` ]];
-then
-        alias conda=mamba
-fi
+source "$HOME/.local/share/nvim/plugged/gruvbox/gruvbox_256palette.sh"
 
 export PATH=$PATH:${HOME}/node/bin
-[[ -s ${HOME}/.autojump/etc/profile.d/autojump.sh ]] && source ${HOME}/.autojump/etc/profile.d/autojump.sh 
 
 if [[ ! -z `which bat` ]];
 then
@@ -127,3 +122,5 @@ then
 else
         alias fzfp="fzf --preview-window 'right:60%' --layout reverse --margin=1,4 --preview 'cat {}'"
 fi
+
+echo "Please config fzf & autojump manually and remove this line from ~/.zshrc"

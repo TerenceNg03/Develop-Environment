@@ -1,9 +1,9 @@
 set nocompatible              " be iMproved, required
 syntax on
 set clipboard=unnamed
+set mouse=a
 set number
 set autoindent
-set expandtab
 set hlsearch
 set incsearch
 set wildmenu
@@ -16,28 +16,101 @@ set statusline=\ %<%F[%1*%M%*%n%R%H]%=\ %y\ %0(%{&fileformat}\ %{&encoding}\ %c:
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set termencoding=utf-8
 set encoding=utf-8
+" show existing tab with 4 spaces width
+set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
 
 call plug#begin()
 Plug 'majutsushi/tagbar'
 Plug 'scrooloose/syntastic'
-Plug 'preservim/nerdtree'
+Plug 'kyazdani42/nvim-web-devicons' " optional, for file icons
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'nvim-lualine/lualine.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'glepnir/dashboard-nvim'
 Plug 'morhetz/gruvbox'
 Plug 'jiangmiao/auto-pairs'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'preservim/nerdcommenter'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 call plug#end()
 
-"<F3> NerdTree
-let g:WinPos='right'
-let g:Size=25
-let g:ShowLineNumbers=1
-let g:Hidden=0
-map <F3> :NERDTreeToggle<CR>
+"<F3> Tree
+lua require("nvim-tree").setup()
+map <F3> :NvimTreeToggle<CR>
+
+"dashboard
+lua << EOF 
+local db = require "dashboard"
+db.custom_center = {
+	{
+		icon = " ",
+		desc = "New File            ",
+		action = "DashboardNewFile",
+		shortcut = "SPC o",
+	},
+	{
+		icon = " ",
+		desc = "Browse Files        ",
+		action = "Telescope file_browser",
+		shortcut = "SPC n",
+	},
+	{
+		icon = " ",
+		desc = "Find Files          ",
+		action = "Telescope find_files",
+		shortcut = "SPC f",
+	},
+    {
+        icon = " ",
+        desc = "Search in Files     ",
+        action = "Telescope live_grep",
+        shortcut = "SPC w",
+    },
+	{
+		icon = " ",
+		desc = "Configure Neovim    ",
+		action = "edit ~/.config/nvim/init.vim",
+		shortcut = "SPC v",
+	},
+	{
+		icon = " ",
+		desc = "Exit Neovim              ",
+		action = "quit",
+	},
+}
+vim.keymap.set("n", "<Leader>o", ":DashboardNewFile<CR>", { silent = true })
+EOF 
+
+"Telescope
+lua << EOF
+local telescope = require "telescope"
+telescope.setup {
+	defaults = {
+		mappings = { n = { ["o"] = require("telescope.actions").select_default } },
+		initial_mode = "normal",
+		file_ignore_patterns = { ".git/", "node_modules/" },
+	},
+	pickers = { find_files = { hidden = true } },
+	extensions = { 
+        file_browser = { hidden = true },
+        fzf = {
+          fuzzy = true,                    -- false will only do exact matching
+          override_generic_sorter = true,  -- override the generic sorter
+          override_file_sorter = true,     -- override the file sorter
+          case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+        },
+    },
+}
+telescope.load_extension "file_browser"
+telescope.load_extension 'fzf'
+EOF
 
 "TagBar
 let g:tagbar_autopreview = 0
@@ -47,54 +120,49 @@ let g:tagbar_width = 25
 let g:tagbar_autofocus = 1
 nmap <F2> :TagbarToggle<CR>
 
-"airline setup
-let g:airline#extensions#tabline#enabled = 1
-" symbols section for unicode/airline symbols
-let g:airline_powerline_fonts = 1
-"Ctrl+h move to left buffer
-nnoremap <C-h> :bp<CR>
-"Ctrl+l move to right buffer
-nnoremap <C-l> :bn<CR>
-"Ctrl+w close buffer
-nnoremap <C-w> :bd<CR>
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-" unicode symbols
-let g:airline_left_sep = '»'
-let g:airline_left_sep = '▶'
-let g:airline_right_sep = '«'
-let g:airline_right_sep = '◀'
-let g:airline_symbols.linenr = '␊'
-let g:airline_symbols.linenr = '␤'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = '⎇'
-let g:airline_symbols.paste = 'ρ'
-let g:airline_symbols.paste = 'Þ'
-let g:airline_symbols.paste = '∥'
-let g:airline_symbols.whitespace = 'Ξ'
-"airline symbols
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr = ''
-"airline setup
-let g:airline#extensions#tabline#enabled = 1
-" symbols section for unicode/airline symbols
-let g:airline_powerline_fonts = 1
-"Ctrl+h move to left buffer
-nnoremap <C-h> :bp<CR>
-"Ctrl+l move to right buffer
-nnoremap <C-l> :bn<CR>
-"Ctrl+w close buffer
-nnoremap <C-w> :bd<CR>
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
+"lualine setup
+lua << EOF
+local lualine = require "lualine"
+lualine.setup {
+	options = {
+		component_separators = "|",
+		section_separators = { left = "", right = "" },
+	},
+	sections = {
+		lualine_a = { { "mode", separator = { left = "" }, right_padding = 2 } },
+		lualine_b = { "filename", "branch", { "diff", colored = false } },
+		lualine_c = {},
+		lualine_x = {},
+		lualine_y = { "filetype", "progress" },
+		lualine_z = { { "location", separator = { right = "" }, left_padding = 2 } },
+	},
+	inactive_sections = {
+		lualine_a = { "filename" },
+		lualine_b = {},
+		lualine_c = {},
+		lualine_x = {},
+		lualine_y = {},
+		lualine_z = {},
+	},
+	tabline = {
+		lualine_a = {
+			{
+				"buffers",
+				separator = { left = "", right = "" },
+				right_padding = 2,
+				symbols = { alternate_file = "" },
+			},
+		},
+	},
+}
+EOF
 
+"Ctrl+h move to left buffer
+nnoremap <C-h> :bp<CR>
+"Ctrl+l move to right buffer
+nnoremap <C-l> :bn<CR>
+"Ctrl+w close buffer
+nnoremap <C-w> :bd<CR>
 
 "Syntastic setup
 set statusline+=%#warningmsg#
@@ -104,24 +172,15 @@ set statusline+=%*
 let g:syntastic_enable_signs = 1
 let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='►'
-"总是打开Location List（相当于QuickFix）窗口，如果你发现syntastic因为与其他插件冲突而经常崩溃，将下面选项置0
 "let g:syntastic_always_populate_loc_list = 1
-"自动打开Locaton List，默认值为2，表示发现错误时不自动打开，当修正以后没有再发现错误时自动关闭，置1表示自动打开自动关闭，0表示关闭自动打开和自动关闭，3表示自动打开，但不自动关闭
 let g:syntastic_auto_loc_list = 2
-"修改Locaton List窗口高度
 let g:syntastic_loc_list_height = 5
-"打开文件时自动进行检查
 let g:syntastic_check_on_open = 0
-"自动跳转到发现的第一个错误或警告处
 let g:syntastic_auto_jump = 0
-"进行实时检查，如果觉得卡顿，将下面的选项置为1
 let g:syntastic_check_on_wq = 0
-"高亮错误
 let g:syntastic_enable_highlighting=1
-"让syntastic支持C++11
 let g:syntastic_cpp_compiler = 'clang++'
 let g:syntastic_cpp_compiler_options = ' -std=c++17 -stdlib=libc++'
-"设置pyflakes为默认的python语法检查工具
 let g:syntastic_python_checkers = ['pyflakes']
 "Disable check for latex
 let g:syntastic_mode_map = {
@@ -137,6 +196,8 @@ let g:gruvbox_transparent_bg=1
 colorscheme gruvbox
 
 " coc.nvim setup
+autocmd VimEnter,ColorScheme * hi! link CocMenuSel PMenuSel
+autocmd VimEnter,ColorScheme * hi! link CocSearch Identifier
 " Some servers have issues with backup files, see #649.
 set nobackup
 set nowritebackup

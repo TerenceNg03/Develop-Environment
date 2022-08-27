@@ -25,11 +25,11 @@
   },
   "Draw Powerline Glyphs" : false,
   "Bold Color" : {
-    "Red Component" : 1,
-    "Color Space" : "Calibrated",
-    "Blue Component" : 1,
+    "Red Component" : 0.5725490196078431,
+    "Color Space" : "sRGB",
+    "Blue Component" : 0.45098039215686275,
     "Alpha Component" : 1,
-    "Green Component" : 1
+    "Green Component" : 0.50980392156862742
   },
   "Ansi 8 Color" : {
     "Red Component" : 0.49889594316482544,
